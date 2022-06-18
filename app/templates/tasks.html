@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <title>Main</title>
+    <style>
+        label {
+            display: inline-block;
+            width: 50px;
+            padding: 10px;
+            border: solid 2px #ccc;
+            transition: all 0.3s;
+        }
+
+        .init_buttons form {
+            display: inline-block;
+        }
+
+        .boxed input[type="submit"] {
+            display: inline-block;
+            padding: 10px;
+            border: solid 2px #ccc;
+            transition: all 0.3s;
+        }
+
+        input[type="radio"] {
+            display: none;
+        }
+
+        input[type="radio"]:checked + label {
+            border: solid 2px green;
+        }
+
+        .pagination label {
+            width: 30px;
+            text-align: center
+        }
+
+        .search input[type=text] {
+            padding: 6px;
+            margin-top: 8px;
+            font-size: 16px;
+            border: none;
+        }
+
+        .search input[type=submit] {
+            padding: 6px 10px;
+            margin-right: 16px;
+            background: #ddd;
+            font-size: 12px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .search button:hover {
+            background: #ccc;
+        }
+
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="init_buttons">
+        <div style="float: left">
+            <form class="boxed" action=/add_task method="get">
+                <input type="submit" value="Add task">
+            </form>
+        </div>
+        <div style="float: right">
+            <form class="filterby" method="get">
+                <input type="hidden" name="status" value="{{ status }}">
+                <input type="search" placeholder="Search..." name="filterby">
+                <input type="submit" value=&#x1F50E;&#xFE0E;>
+            </form>
+            <form class="boxed" method="get">
+                <input type="radio" id="active" name="status" value="active"
+                       onclick="{{'this.form.submit();' if status != 'active'}}"
+                       {{ "checked" if status == 'active' }} />
+                <label for="active">Active</label>
+
+                <input type="radio" id="finished" name="status" value="finished"
+                       onclick="{{'this.form.submit();' if status != 'finished'}}"
+                       {{ "checked" if status == 'finished' }} />
+                <label for="finished">Finished</label>
+
+                <input type="radio" id="all" name="status" value="all"
+                       onclick="{{'this.form.submit();' if status != 'all'}}"
+                       {{ "checked" if status == 'all'}} />
+                <label for="all">All</label>
+                {% if filterby %}
+                    <input type="hidden" name="filterby" value="{{ filterby }}">
+                {% endif %}
+            </form>
+        </div>
+    </div>
+    <br style="clear:both;">
+
+    <div class="tasks_list">
+        <table>
+            {% for task in tasks %}
+                <tr>
+                    {% if task.is_active %}
+                        <form action=/finish_task method="post">
+                            <td>
+                                <input type="submit" value="Finish" />
+                            </td>
+                            <td>
+                                {{ task.description }}
+                            </td>
+                            <input type="hidden" name="task_index" id="task_index" value="{{ loop.index0 }}" />
+                        </form>
+                    {% else %}
+                        <form action=/delete_task method="post">
+                            <td>
+                                <input type="submit" value="Delete" />
+                            </td>
+                            <td>
+                                {{ task.description }}
+                            </td>
+                            <input type="hidden" name="task_index" id="task_index" value="{{ loop.index0 }}" />
+                        </form>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </table>
+        <table>
+            {% for i in range(10 - (tasks|length)) %}
+                <tr>
+                    <td>
+                        &nbsp;
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        {% if (pages_repr|length) > 1 %}
+            {% include 'pagination.html' %}
+        {% endif %}
+    </div>
+{% endblock %}

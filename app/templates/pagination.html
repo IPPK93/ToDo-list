@@ -1,0 +1,22 @@
+<span class="pagination" style="margin:auto; display:table;">
+    <table>
+        <tr>
+            {% for num in pages_repr %}
+                <form method="get">
+                    <input type="hidden" name="status" value="{{ status }}">
+                    {% if filterby %}
+                        <input type="hidden" name="filterby" value="{{ filterby }}">
+                    {% endif %}
+                    <input type="radio" id="page {{ num }}" name="page" value="{{ num }}"
+                           {% if num == '...' %}
+                                onclick="this.checked = false;"
+                           {% elif cur_page != num %}
+                                onclick="this.form.submit()"
+                           {% endif %}
+                           {{ "checked" if cur_page == num }} />
+                    <label for="page {{ num }}">{{ num }}</label>
+                </form>
+            {% endfor %}
+        </tr>
+    </table>
+</span>

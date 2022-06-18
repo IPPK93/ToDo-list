@@ -1,0 +1,15 @@
+<html>
+    <head>
+        {% block head %}
+        <title>ToDo list</title>
+        {% endblock %}
+
+    </head>
+    <body>
+        <form class="main" action=/main_page method="get" style="text-align: center;">
+            <input type="submit" value="Main" style="padding: 10px 50px">
+        </form>
+        {% block body %}
+        {% endblock %}
+    </body>
+</html>

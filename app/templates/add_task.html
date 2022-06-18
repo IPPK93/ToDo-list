@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block body %}
+    <h1> Add new task </h1>
+    <form action=/add_task method="post">
+        <label for="task_description">Task description</label>
+        <input type="text" name="task_description" id="task_description">
+        <input type="submit">
+    </form>
+{% endblock %}
